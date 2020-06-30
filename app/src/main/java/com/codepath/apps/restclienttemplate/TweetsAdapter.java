@@ -20,6 +20,11 @@ public class TweetsAdapter extends RecyclerView.Adapter<TweetsAdapter.ViewHolder
     Context context;
     List<Tweet> tweets;
 
+    public TweetsAdapter(Context context, List<Tweet> tweets) {
+        this.context = context;
+        this.tweets = tweets;
+    }
+
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
