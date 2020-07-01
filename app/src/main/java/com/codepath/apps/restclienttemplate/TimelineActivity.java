@@ -11,6 +11,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 import org.parceler.Parcels;
 
@@ -23,6 +24,8 @@ import okhttp3.Headers;
 import java.util.*;
 
 public class TimelineActivity extends AppCompatActivity {
+
+    ProgressBar pb;
 
     TwitterClient client;
     public static final String TAG = "TimelineActivity";
@@ -43,6 +46,8 @@ public class TimelineActivity extends AppCompatActivity {
 
         //find recycler view
         rvTweets = findViewById(R.id.rvTweets);
+
+        pb = (ProgressBar) findViewById(R.id.pbLoading);
 
         //initialize list of tweets and adapter
         tweets = new ArrayList<>();
@@ -75,6 +80,7 @@ public class TimelineActivity extends AppCompatActivity {
     }
 
     private void populateHomeTimeline() {
+        pb.setVisibility(ProgressBar.VISIBLE);
         client.getHomeTimeline(new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Headers headers, JSON json) {
@@ -95,6 +101,7 @@ public class TimelineActivity extends AppCompatActivity {
                 Log.e(TAG, "failure! " + response, throwable);
             }
         });
+        pb.setVisibility(ProgressBar.INVISIBLE);
     }
 
     @Override
