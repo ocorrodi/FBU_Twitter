@@ -42,12 +42,22 @@
     <ImageView
         android:id="@+id/ivMedia"
         android:layout_width="302dp"
-        android:layout_height="118dp"
+        android:layout_height="wrap_content"
         android:layout_below="@+id/tvBody"
         android:layout_alignParentEnd="true"
         android:layout_marginStart="5dp"
         android:layout_marginTop="10dp"
-        android:layout_marginEnd="34dp"
+        android:layout_marginEnd="0dp"
         android:layout_toEndOf="@+id/ivProfileImage"
         tools:srcCompat="@tools:sample/backgrounds/scenic" />
+
+    <TextView
+        android:id="@+id/tvTimestamp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginTop="0dp"
+        android:layout_marginEnd="10dp"
+        android:text="TextView" />
 </RelativeLayout>

@@ -16,6 +16,8 @@ public class Tweet {
     public User user;
     public String mediaURL;
     public boolean hasMedia;
+    public String date;
+    public String timestamp;
 
     //empty constructor for Parceler
     public Tweet() {}
@@ -25,6 +27,7 @@ public class Tweet {
         tweet.body = jsonObject.getString("text");
         tweet.createdAt = jsonObject.getString("created_at");
         tweet.user = User.fromJson(jsonObject.getJSONObject("user"));
+        tweet.createdAt = jsonObject.getString("created_at");
 
         try {
             JSONArray mediaArray = jsonObject.getJSONObject("entities").getJSONArray("media");
