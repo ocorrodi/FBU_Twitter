@@ -79,7 +79,7 @@ public class TweetsAdapter extends RecyclerView.Adapter<TweetsAdapter.ViewHolder
     //bind values based on position of the element
 
     //define a view holder
-    public class ViewHolder extends RecyclerView.ViewHolder {
+    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         ImageView ivProfileImage;
         TextView tvBody;
@@ -142,6 +142,7 @@ public class TweetsAdapter extends RecyclerView.Adapter<TweetsAdapter.ViewHolder
             btnReply = itemView.findViewById(R.id.btnReply);
             btnRetweet = itemView.findViewById(R.id.btnRetweet);
             btnFavorite = itemView.findViewById(R.id.btnFavorite);
+            itemView.setOnClickListener(this);
         }
 
         public void bind(final Tweet tweet) {
@@ -188,7 +189,7 @@ public class TweetsAdapter extends RecyclerView.Adapter<TweetsAdapter.ViewHolder
                     client.favorite(tweet.id, new JsonHttpResponseHandler() {
                         @Override
                         public void onSuccess(int statusCode, Headers headers, JSON json) {
-
+                            btnFavorite.setBackgroundResource(R.drawable.ic_vector_heart);
                         }
 
                         @Override
@@ -200,5 +201,17 @@ public class TweetsAdapter extends RecyclerView.Adapter<TweetsAdapter.ViewHolder
             });
 
         }
+        @Override
+        public void onClick(View view) {
+            int position = getAdapterPosition();
+
+            if (position != RecyclerView.NO_POSITION) {
+                Intent intent = new Intent(context, TweetDetailActivity.class);
+                intent.putExtra("tweet", Parcels.wrap(tweets.get(position)));
+                context.startActivity(intent);
+            }
+
+        }
+
     }
 }

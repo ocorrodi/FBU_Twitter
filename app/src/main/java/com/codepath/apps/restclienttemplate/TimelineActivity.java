@@ -109,6 +109,7 @@ public class TimelineActivity extends AppCompatActivity {
                     e.printStackTrace();
                     Log.e(TAG, "json exception");
                 }
+                pb.setVisibility(ProgressBar.INVISIBLE);
             }
 
             @Override
@@ -116,7 +117,7 @@ public class TimelineActivity extends AppCompatActivity {
                 Log.e(TAG, "failure! " + response, throwable);
             }
         });
-        pb.setVisibility(ProgressBar.INVISIBLE);
+        //pb.setVisibility(ProgressBar.INVISIBLE);
     }
 
     @Override
