@@ -11,6 +11,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.codepath.apps.restclienttemplate.models.Tweet;
+import com.codepath.apps.restclienttemplate.models.User;
 import com.codepath.asynchttpclient.callback.JsonHttpResponseHandler;
 
 import org.json.JSONException;
@@ -27,6 +28,7 @@ public class ComposeActivity extends AppCompatActivity {
 
     public static final int MAX_TWEET_LENGTH = 280;
     public static final String TAG = "ComposeActivity";
+    public int userID;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,6 +38,17 @@ public class ComposeActivity extends AppCompatActivity {
         etCompose = findViewById(R.id.etCompose);
         btnTweet = findViewById(R.id.btnTweet);
         client = TwitterApp.getRestClient(this);
+
+
+        boolean isReply = getIntent().getBooleanExtra("isReply", false);
+
+        if (isReply) {
+            Tweet replyTweet = Parcels.unwrap(getIntent().getParcelableExtra("tweet"));
+            User replyUser = replyTweet.user;
+            userID = replyTweet.id;
+            String username = replyUser.screenName;
+            etCompose.setText("@" + username);
+        }
 
         //set a click listener on the button
         btnTweet.setOnClickListener(new View.OnClickListener() {
@@ -50,7 +63,7 @@ public class ComposeActivity extends AppCompatActivity {
                     Toast.makeText(ComposeActivity.this, "Sorry, your tweet is too long", Toast.LENGTH_LONG).show();
                     return;
                 }
-                client.publishTweet(tweetContent, new JsonHttpResponseHandler() {
+                client.publishTweet(tweetContent, userID, new JsonHttpResponseHandler() {
                     @Override
                     public void onSuccess(int statusCode, Headers headers, JSON json) {
                         Log.i(TAG, "successfully published tweet");

@@ -30,6 +30,7 @@ public class TimelineActivity extends AppCompatActivity {
     TwitterClient client;
     public static final String TAG = "TimelineActivity";
     public static final int REQUEST_CODE = 20;
+    public static final int REPLY_REQUEST_CODE = 25;
 
     private SwipeRefreshLayout swipeContainer;
 
@@ -116,13 +117,14 @@ public class TimelineActivity extends AppCompatActivity {
             //Toast.makeText(this, "compose", Toast.LENGTH_SHORT).show();
         }
         Intent intent = new Intent(this, ComposeActivity.class);
+        intent.putExtra("isReply", Parcels.wrap(false));
         startActivityForResult(intent, REQUEST_CODE);
         return true;
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        if (requestCode == REQUEST_CODE && resultCode == RESULT_OK) {
+        if ((requestCode == REQUEST_CODE || requestCode == REPLY_REQUEST_CODE) && resultCode == RESULT_OK) {
             //get data from intent
             Tweet tweet = Parcels.unwrap(data.getParcelableExtra("tweet"));
 

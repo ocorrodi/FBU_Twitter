@@ -1,10 +1,13 @@
 package com.codepath.apps.restclienttemplate;
 
 import android.content.Context;
+import android.content.Intent;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -18,6 +21,10 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.Locale;
+import org.parceler.Parcels;
+
+import static androidx.core.app.ActivityCompat.startActivityForResult;
+
 
 public class TweetsAdapter extends RecyclerView.Adapter<TweetsAdapter.ViewHolder> {
 
@@ -76,11 +83,14 @@ public class TweetsAdapter extends RecyclerView.Adapter<TweetsAdapter.ViewHolder
         TextView tvScreenName;
         ImageView ivMedia;
         TextView tvTimestamp;
+        ImageButton btnReply;
 
         private static final int SECOND_MILLIS = 1000;
         private static final int MINUTE_MILLIS = 60 * SECOND_MILLIS;
         private static final int HOUR_MILLIS = 60 * MINUTE_MILLIS;
         private static final int DAY_MILLIS = 24 * HOUR_MILLIS;
+
+        public static final int REQUEST_CODE = 25;
 
 
         public String getRelativeTimeAgo(String rawJsonDate) {
@@ -124,9 +134,10 @@ public class TweetsAdapter extends RecyclerView.Adapter<TweetsAdapter.ViewHolder
             tvScreenName = itemView.findViewById(R.id.tvScreenName);
             ivMedia = itemView.findViewById(R.id.ivMedia);
             tvTimestamp = itemView.findViewById(R.id.tvTimestamp);
+            btnReply = itemView.findViewById(R.id.btnReply);
         }
 
-        public void bind(Tweet tweet) {
+        public void bind(final Tweet tweet) {
             tvBody.setText(tweet.body);
             tvScreenName.setText(tweet.user.screenName);
             Glide.with(context).load(tweet.user.publicImageUrl).into(ivProfileImage);
@@ -134,6 +145,15 @@ public class TweetsAdapter extends RecyclerView.Adapter<TweetsAdapter.ViewHolder
                 Glide.with(context).load(tweet.mediaURL).into(ivMedia);
             }
             tvTimestamp.setText(getRelativeTimeAgo(tweet.createdAt));
+            btnReply.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent intent = new Intent(context, ComposeActivity.class);
+                    intent.putExtra("tweet", Parcels.wrap(tweet));
+                    intent.putExtra("isReply", true);
+                    ((TimelineActivity) context).startActivityForResult(intent, REQUEST_CODE);
+                }
+            });
         }
     }
 }
