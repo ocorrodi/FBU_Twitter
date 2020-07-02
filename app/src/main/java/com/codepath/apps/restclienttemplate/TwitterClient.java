@@ -54,7 +54,7 @@ public class TwitterClient extends OAuthBaseClient {
 		client.get(apiUrl, params, handler);
 	}
 
-	public void publishTweet(String tweetContent, int id, JsonHttpResponseHandler handler) {
+	public void publishTweet(String tweetContent, long id, JsonHttpResponseHandler handler) {
 		String apiUrl = getApiUrl("statuses/update.json");
 		// Can specify query string params directly or through RequestParams.
 		RequestParams params = new RequestParams();
@@ -63,7 +63,7 @@ public class TwitterClient extends OAuthBaseClient {
 		client.post(apiUrl, params, "", handler);
 	}
 
-	public void favorite(int id, JsonHttpResponseHandler handler) {
+	public void favorite(long id, JsonHttpResponseHandler handler) {
 		String apiUrl = getApiUrl("favorites/create.json");
 		// Can specify query string params directly or through RequestParams.
 		RequestParams params = new RequestParams();
@@ -71,8 +71,16 @@ public class TwitterClient extends OAuthBaseClient {
 		client.post(apiUrl, params, "", handler);
 	}
 
-	public void retweet(int id, JsonHttpResponseHandler handler) {
+	public void retweet(long id, JsonHttpResponseHandler handler) {
 		String apiUrl = getApiUrl("favorites/create.json");
+		// Can specify query string params directly or through RequestParams.
+		RequestParams params = new RequestParams();
+		params.put("id", id);
+		client.get(apiUrl, params, handler);
+	}
+
+	public void getID(long id, JsonHttpResponseHandler handler) {
+		String apiUrl = getApiUrl("statuses/show.json");
 		// Can specify query string params directly or through RequestParams.
 		RequestParams params = new RequestParams();
 		params.put("id", id);

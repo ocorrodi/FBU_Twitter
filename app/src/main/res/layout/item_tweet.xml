@@ -59,7 +59,7 @@
         android:layout_alignParentEnd="true"
         android:layout_marginTop="0dp"
         android:layout_marginEnd="10dp"
-        android:text="TextView" />
+        android:text="timestamp" />
 
     <ImageButton
         android:id="@+id/btnReply"
@@ -71,5 +71,28 @@
         android:layout_toRightOf="@id/ivProfileImage"
         android:background="#FFFFFF"
         android:src="@android:drawable/sym_action_chat" />
+
+    <ImageButton
+        android:id="@+id/btnRetweet"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/ivMedia"
+        android:layout_marginLeft="100dp"
+        android:layout_marginTop="5dp"
+        android:layout_toRightOf="@id/btnReply"
+        android:background="#F5F7F8"
+        android:src="@android:drawable/ic_popup_sync" />
+
+    <ImageButton
+        android:id="@+id/btnFavorite"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/ivMedia"
+        android:layout_marginLeft="100dp"
+        android:layout_marginTop="5dp"
+        android:layout_toRightOf="@id/btnRetweet"
+        android:background="#F5F7F8"
+        android:src="@android:drawable/star_off" />
+
 
 </RelativeLayout>

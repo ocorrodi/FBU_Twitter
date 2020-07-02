@@ -89,6 +89,20 @@ public class TimelineActivity extends AppCompatActivity {
                 try {
                     adapter.clear();
                     adapter.addAll(Tweet.fromJsonArray(json.jsonArray));
+
+      /*              for (Tweet tweet : tweets) {
+                        client.getID(tweet.id, new JsonHttpResponseHandler() {
+                            @Override
+                            public void onSuccess(int statusCode, Headers headers, JSON json) {
+
+                            }
+
+                            @Override
+                            public void onFailure(int statusCode, Headers headers, String response, Throwable throwable) {
+
+                            }
+                        });
+                    } */
                     //adapter.notifyDataSetChanged();
                     swipeContainer.setRefreshing(false);
                 } catch (JSONException e) {

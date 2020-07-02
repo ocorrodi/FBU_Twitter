@@ -16,12 +16,15 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.codepath.apps.restclienttemplate.models.Tweet;
+import com.codepath.asynchttpclient.callback.JsonHttpResponseHandler;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.Locale;
 import org.parceler.Parcels;
+
+import okhttp3.Headers;
 
 import static androidx.core.app.ActivityCompat.startActivityForResult;
 
@@ -84,6 +87,8 @@ public class TweetsAdapter extends RecyclerView.Adapter<TweetsAdapter.ViewHolder
         ImageView ivMedia;
         TextView tvTimestamp;
         ImageButton btnReply;
+        ImageButton btnRetweet;
+        ImageButton btnFavorite;
 
         private static final int SECOND_MILLIS = 1000;
         private static final int MINUTE_MILLIS = 60 * SECOND_MILLIS;
@@ -135,6 +140,8 @@ public class TweetsAdapter extends RecyclerView.Adapter<TweetsAdapter.ViewHolder
             ivMedia = itemView.findViewById(R.id.ivMedia);
             tvTimestamp = itemView.findViewById(R.id.tvTimestamp);
             btnReply = itemView.findViewById(R.id.btnReply);
+            btnRetweet = itemView.findViewById(R.id.btnRetweet);
+            btnFavorite = itemView.findViewById(R.id.btnFavorite);
         }
 
         public void bind(final Tweet tweet) {
@@ -154,6 +161,44 @@ public class TweetsAdapter extends RecyclerView.Adapter<TweetsAdapter.ViewHolder
                     ((TimelineActivity) context).startActivityForResult(intent, REQUEST_CODE);
                 }
             });
+
+            final TwitterClient client = new TwitterClient(context);
+
+            btnRetweet.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    client.retweet(tweet.id, new JsonHttpResponseHandler() {
+                        @Override
+                        public void onSuccess(int statusCode, Headers headers, JSON json) {
+                            btnRetweet.setBackgroundColor(0x0);
+                            Log.i("TweetsAdapter", "success!");
+                        }
+
+                        @Override
+                        public void onFailure(int statusCode, Headers headers, String response, Throwable throwable) {
+                            btnRetweet.setBackgroundColor(0x00FF0000);
+                            Log.e("TweetsAdapter", response);
+                        }
+                    });
+                }
+            });
+            btnFavorite.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    client.favorite(tweet.id, new JsonHttpResponseHandler() {
+                        @Override
+                        public void onSuccess(int statusCode, Headers headers, JSON json) {
+
+                        }
+
+                        @Override
+                        public void onFailure(int statusCode, Headers headers, String response, Throwable throwable) {
+
+                        }
+                    });
+                }
+            });
+
         }
     }
 }

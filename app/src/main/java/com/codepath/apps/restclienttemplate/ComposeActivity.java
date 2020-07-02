@@ -28,7 +28,7 @@ public class ComposeActivity extends AppCompatActivity {
 
     public static final int MAX_TWEET_LENGTH = 280;
     public static final String TAG = "ComposeActivity";
-    public int userID;
+    public long userID;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

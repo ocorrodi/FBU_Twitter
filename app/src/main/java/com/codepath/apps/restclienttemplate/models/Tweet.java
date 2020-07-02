@@ -1,5 +1,8 @@
 package com.codepath.apps.restclienttemplate.models;
 
+import com.codepath.apps.restclienttemplate.TimelineActivity;
+import com.codepath.apps.restclienttemplate.TwitterClient;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -18,7 +21,7 @@ public class Tweet {
     public boolean hasMedia;
     public String date;
     public String timestamp;
-    public Integer id;
+    public Long id;
 
     //empty constructor for Parceler
     public Tweet() {}
@@ -29,7 +32,7 @@ public class Tweet {
         tweet.createdAt = jsonObject.getString("created_at");
         tweet.user = User.fromJson(jsonObject.getJSONObject("user"));
         tweet.createdAt = jsonObject.getString("created_at");
-        tweet.id = jsonObject.getInt("id");
+        tweet.id = jsonObject.getLong("id");
 
         try {
             JSONArray mediaArray = jsonObject.getJSONObject("entities").getJSONArray("media");
