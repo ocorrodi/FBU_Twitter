@@ -1,7 +1,4 @@
-package com.codepath.apps.restclienttemplate.models;
-
-import com.codepath.apps.restclienttemplate.TimelineActivity;
-import com.codepath.apps.restclienttemplate.TwitterClient;
+package com.codepath.apps.TwitterClient.models;
 
 import org.json.JSONArray;
 import org.json.JSONException;

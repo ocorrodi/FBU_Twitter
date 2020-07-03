@@ -111,7 +111,7 @@ For example, if you were connecting to Twitter, you would want a Tweet model as 
 
 ```java
 // models/Tweet.java
-package com.codepath.apps.restclienttemplate.models;
+package com.codepath.apps.TwitterClient.models;
 
 import androidx.room.ColumnInfo;
 import androidx.room.Embedded;

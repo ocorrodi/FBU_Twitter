@@ -40,6 +40,8 @@
         android:layout_marginTop="42dp"
         android:layout_marginEnd="10dp"
         android:text="this is my tweet!"
+        android:autoLink="all"
+        android:linksClickable="true"
         android:textSize="18sp" />
 
     <ImageView

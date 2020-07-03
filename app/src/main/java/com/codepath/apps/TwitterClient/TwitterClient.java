@@ -1,12 +1,10 @@
-package com.codepath.apps.restclienttemplate;
+package com.codepath.apps.TwitterClient;
 
 import android.content.Context;
 
-import com.codepath.apps.restclienttemplate.models.Tweet;
 import com.codepath.asynchttpclient.RequestParams;
 import com.codepath.asynchttpclient.callback.JsonHttpResponseHandler;
 import com.codepath.oauth.OAuthBaseClient;
-import com.github.scribejava.apis.FlickrApi;
 import com.github.scribejava.apis.TwitterApi;
 import com.github.scribejava.core.builder.api.BaseApi;
 
@@ -50,7 +48,9 @@ public class TwitterClient extends OAuthBaseClient {
 		// Can specify query string params directly or through RequestParams.
 		RequestParams params = new RequestParams();
 		params.put("count", 10);
-		params.put("since_id", id);
+		if (id != 1) {
+			params.put("max_id", id);
+		}
 		client.get(apiUrl, params, handler);
 	}
 

@@ -1,4 +1,4 @@
-package com.codepath.apps.restclienttemplate;
+package com.codepath.apps.TwitterClient;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -12,10 +12,10 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ProgressBar;
-import android.widget.Toast;
+
 import org.parceler.Parcels;
 
-import com.codepath.apps.restclienttemplate.models.Tweet;
+import com.codepath.apps.TwitterClient.models.Tweet;
 import com.codepath.asynchttpclient.callback.JsonHttpResponseHandler;
 
 import org.json.JSONException;
@@ -123,6 +123,7 @@ public class TimelineActivity extends AppCompatActivity {
                     adapter.addAll(Tweet.fromJsonArray(json.jsonArray), numItems);
                     numItems += 10;
                     swipeContainer.setRefreshing(false);
+                    Log.i(TAG, "num tweets: " + tweets.size());
                 } catch (JSONException e) {
                     e.printStackTrace();
                     Log.e(TAG, "json exception");
