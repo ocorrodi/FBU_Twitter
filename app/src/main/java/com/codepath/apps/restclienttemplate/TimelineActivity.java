@@ -27,10 +27,14 @@ public class TimelineActivity extends AppCompatActivity {
 
     ProgressBar pb;
 
+    private EndlessRecyclerViewScrollListener scrollListener;
+
     TwitterClient client;
     public static final String TAG = "TimelineActivity";
     public static final int REQUEST_CODE = 20;
     public static final int REPLY_REQUEST_CODE = 25;
+
+    public static int numItems;
 
     private SwipeRefreshLayout swipeContainer;
 
@@ -43,20 +47,38 @@ public class TimelineActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_timeline);
 
-        client = TwitterApp.getRestClient(this);
+        numItems = 0;
 
-        //find recycler view
         rvTweets = findViewById(R.id.rvTweets);
-
-        pb = (ProgressBar) findViewById(R.id.pbLoading);
 
         //initialize list of tweets and adapter
         tweets = new ArrayList<>();
         adapter = new TweetsAdapter(this, tweets);
 
-        rvTweets.setLayoutManager(new LinearLayoutManager(this));
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
+
+        rvTweets.setLayoutManager(linearLayoutManager);
 
         rvTweets.setAdapter(adapter);
+
+        // Retain an instance so that you can call `resetState()` for fresh searches
+        scrollListener = new EndlessRecyclerViewScrollListener(linearLayoutManager) {
+            @Override
+            public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
+                // Triggered only when new data needs to be appended to the list
+                // Add whatever code is needed to append new items to the bottom of the list
+                Log.i(TAG, "loading more items");
+                loadNextDataFromApi(page);
+            }
+        };
+        // Adds the scroll listener to RecyclerView
+        rvTweets.addOnScrollListener(scrollListener);
+
+        client = TwitterApp.getRestClient(this);
+
+        pb = (ProgressBar) findViewById(R.id.pbLoading);
+
+
 
         // Lookup the swipe container view
         swipeContainer = (SwipeRefreshLayout) findViewById(R.id.swipeContainer);
@@ -67,7 +89,7 @@ public class TimelineActivity extends AppCompatActivity {
                 // Your code to refresh the list here.
                 // Make sure you call swipeContainer.setRefreshing(false)
                 // once the network request has completed successfully.
-                populateHomeTimeline();
+                populateHomeTimeline(1);
             }
         });
         // Configure the refreshing colors
@@ -77,33 +99,29 @@ public class TimelineActivity extends AppCompatActivity {
                 android.R.color.holo_red_light);
 
         //configure recycler view: layout manager and adapter
-        populateHomeTimeline();
+        populateHomeTimeline(1);
     }
 
-    private void populateHomeTimeline() {
+    private void loadNextDataFromApi(int page) {
+        long lastID = 1;
+        if (!tweets.isEmpty()) {
+            Tweet lastTweet = tweets.get(tweets.size() - 1);
+            lastID = lastTweet.id;
+        }
+        populateHomeTimeline(lastID);
+        scrollListener.resetState();
+    }
+
+    private void populateHomeTimeline(long startID) {
         pb.setVisibility(ProgressBar.VISIBLE);
-        client.getHomeTimeline(new JsonHttpResponseHandler() {
+        client.getHomeTimeline(startID, new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Headers headers, JSON json) {
                 Log.i(TAG, "success! " + json.toString());
                 try {
                     adapter.clear();
-                    adapter.addAll(Tweet.fromJsonArray(json.jsonArray));
-
-      /*              for (Tweet tweet : tweets) {
-                        client.getID(tweet.id, new JsonHttpResponseHandler() {
-                            @Override
-                            public void onSuccess(int statusCode, Headers headers, JSON json) {
-
-                            }
-
-                            @Override
-                            public void onFailure(int statusCode, Headers headers, String response, Throwable throwable) {
-
-                            }
-                        });
-                    } */
-                    //adapter.notifyDataSetChanged();
+                    adapter.addAll(Tweet.fromJsonArray(json.jsonArray), numItems);
+                    numItems += 10;
                     swipeContainer.setRefreshing(false);
                 } catch (JSONException e) {
                     e.printStackTrace();
